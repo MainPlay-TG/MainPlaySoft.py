@@ -5,4 +5,5 @@ https://t.me/MainPlayCh"""
 __scripts__ = []
 __all__ = []
 from ._module_info import version as __version__
+from .core import MPSoft
 __all__.sort()
