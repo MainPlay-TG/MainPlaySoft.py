@@ -31,11 +31,13 @@ class MPSoft:
       self.platform = self.LINUX
       if "TERMUX_VERSION" in os.environ:
         self.is_termux = True
+      if not "PREFIX" in os.environ:
+        os.environ["PREFIX"] = ""
     if sys.platform == "win32":
       self.is_windows = True
       self.platform = self.WINDOWS
     if self.platform is None:
-      raise MPSoftError(lang["core/unknown_os"] % sys.platform)
+      raise MPSoftError(self.lang["core/unknown_os"] % sys.platform)
 
   @property
   def ms(self) -> MS2:

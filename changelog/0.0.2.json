@@ -1,0 +1,10 @@
+{
+  "added": [],
+  "changed": [],
+  "fixed": [
+    "Исправление работы с `os.environ['PREFIX']`"
+  ],
+  "removed": [],
+  "version_id": 2,
+  "version": "0.0.2"
+}

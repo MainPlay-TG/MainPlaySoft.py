@@ -25,9 +25,9 @@ class Dir:
     """Основная папка данных"""
     if self._data is None:
       if self._core.is_linux:
-        self._data = os.path.expanduser("~/.config/%s/%s" % (self.author, self.name))
+        self._data = os.path.expanduser("~/.config/" + self.author + "/" + self.name)
       if self._core.is_windows:
-        self._data = os.path.expanduser("~/AppData/Roaming/%s/%s" % (self.author, self.name))
+        self._data = os.path.expanduser("~/AppData/Roaming/" + self.author + "/" + self.name)
       self._data = os.path.abspath(self._data).replace("\\", "/")
       ms.dir.create(self._data, force=self.force_mkdir)
     return self._data
@@ -38,10 +38,10 @@ class Dir:
     if self._globaldata is None:
       if self._core.is_linux:
         if not "PREFIX" in os.environ:
-          os.environ["PREFIX"] = "/"
-        self._globaldata = "%setc/%s/%s" % (os.environ["PREFIX"], self.author, self.name)
+          os.environ["PREFIX"] = ""
+        self._globaldata = os.environ["PREFIX"] + "/etc/" + self.author + "/" + self.name
       if self._core.is_windows:
-        self._data = "C:/ProgramData/%s/%s" % (self.author, self.name)
+        self._data = "C:/ProgramData/" + self.author + "/" + self.name
       self._globaldata = os.path.abspath(self._globaldata).replace("\\", "/")
       ms.dir.create(self._globaldata, force=self.force_mkdir)
     return self._globaldata
@@ -51,9 +51,9 @@ class Dir:
     """Локальная папка данных"""
     if self._localdata is None:
       if self._core.is_linux:
-        self._localdata = os.path.expanduser("~/.local/etc/%s/%s" % (self.author, self.name))
+        self._localdata = os.path.expanduser("~/.local/etc/" + self.author + "/" + self.name)
       if self._core.is_windows:
-        self._localdata = os.path.expanduser("~/AppData/Local/%s/%s" % (self.author, self.name))
+        self._localdata = os.path.expanduser("~/AppData/Local/" + self.author + "/" + self.name)
       self._localdata = os.path.abspath(self._localdata).replace("\\", "/")
       ms.dir.create(self._localdata, force=self.force_mkdir)
     return self._localdata
@@ -79,18 +79,13 @@ class Dir:
     """Папка для временных файлов"""
     if self._temp is None:
       import atexit
-      if self._core.is_linux:
-        if not "PREFIX" in os.environ:
-          os.environ["PREFIX"] = "/"
-        tempdir = "%stmp" % os.environ["PREFIX"]
-      if self._core.is_windows:
-        tempdir = os.path.expanduser("~/AppData/Local/Temp")
-      dir = os.path.abspath(tempdir).replace("\\", "/")
+      import tempfile
+      dir = os.path.abspath(tempfile.gettempdir()).replace("\\", "/")
       while True:
         name = "tmp" + ms.utils.randstr(16)
-        if not ms.path.exists("%s/%s" % (dir, name)):
+        if not ms.path.exists(dir + "/" + name):
           break
-      self._temp = "%s/%s" % (dir, name)
+      self._temp = dir + "/" + name
       ms.dir.create(self._temp)
 
       @atexit.register
